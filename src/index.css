@@ -1,0 +1,147 @@
+@import "@fontsource/oswald/400.css";
+@import "@fontsource/oswald/500.css";
+@import "@fontsource/oswald/600.css";
+@import "@fontsource/oswald/700.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-black: #1a1a1a;
+    --color-yellow: #F9FF00;
+    --color-red: #FF0004;
+    --color-white: #FFFFFF;
+
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 60 100% 50%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 60 100% 50%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 359 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 10%;
+    --input: 0 0% 10%;
+    --ring: 0 0% 10%;
+    --radius: 0px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    font-family: "Inter", sans-serif;
+    background: var(--color-white);
+    color: var(--color-black);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Oswald", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+}
+
+@layer components {
+  .border-brutal {
+    border: 3px solid var(--color-black);
+  }
+  .border-brutal-thin {
+    border: 1px solid var(--color-black);
+  }
+  .bg-yellow {
+    background-color: var(--color-yellow);
+  }
+  .bg-red {
+    background-color: var(--color-red);
+  }
+  .bg-black-brutal {
+    background-color: var(--color-black);
+  }
+  .text-yellow {
+    color: var(--color-yellow);
+  }
+  .text-red {
+    color: var(--color-red);
+  }
+  .hover-yellow:hover {
+    background-color: var(--color-yellow);
+  }
+  .btn-brutal {
+    font-family: "Oswald", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    border: 3px solid var(--color-black);
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+  .btn-brutal:hover {
+    background: var(--color-white);
+    border-color: var(--color-black);
+  }
+  .btn-brutal-yellow {
+    background: var(--color-yellow);
+    color: var(--color-black);
+  }
+  .btn-brutal-red {
+    background: var(--color-red);
+    color: var(--color-white);
+  }
+  .btn-brutal-black {
+    background: var(--color-black);
+    color: var(--color-white);
+  }
+  .input-brutal {
+    border: 3px solid var(--color-black);
+    padding: 12px 16px;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    background: var(--color-white);
+    outline: none;
+    transition: border-color 0.15s ease;
+    width: 100%;
+  }
+  .input-brutal:focus {
+    border-color: var(--color-red);
+  }
+  .grid-brutal {
+    display: grid;
+    gap: 0;
+  }
+  .cell-brutal {
+    border: 3px solid var(--color-black);
+    margin: -1.5px;
+    position: relative;
+  }
+}
+
+@layer utilities {
+  .font-oswald {
+    font-family: "Oswald", sans-serif;
+  }
+  .font-inter {
+    font-family: "Inter", sans-serif;
+  }
+  .tracking-tight-oswald {
+    letter-spacing: -0.02em;
+  }
+}
