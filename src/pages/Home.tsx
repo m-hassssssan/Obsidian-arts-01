@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/sections/Hero";
 import { Portfolio } from "@/sections/Portfolio";
@@ -5,6 +6,17 @@ import { Roster } from "@/sections/Roster";
 import { InquiryForm } from "@/sections/InquiryForm";
 
 export default function Home() {
+  useEffect(() => {
+    if (window.location.hash) {
+      const timer = setTimeout(() => {
+        const id = window.location.hash.substring(1);
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
       <Navigation />

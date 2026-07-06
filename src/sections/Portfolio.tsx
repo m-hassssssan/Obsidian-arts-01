@@ -307,6 +307,20 @@ export function Portfolio() {
           );
         })}
       </div>
+
+      {/* View Full Gallery Case Button */}
+      <div className="flex justify-center mt-12 px-6 md:px-12 lg:px-16">
+        <a
+          href="./gallery.html"
+          className="btn-brutal btn-brutal-yellow inline-flex items-center gap-2 group text-center no-underline"
+        >
+          VIEW FULL CASE GALLERY (50+ WORKS)
+          <ArrowUpRight
+            size={18}
+            className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+          />
+        </a>
+      </div>
     </section>
   );
 }

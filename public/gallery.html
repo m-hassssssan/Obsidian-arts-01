@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Obsidian Arts &mdash; Available Arts &amp; Full Gallery</title>
+<meta name="description" content="Explore available arts and our full gallery collection of vanguard AI-generated works. Obsidian Arts, Berlin and New York."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#1a1a1a;--yellow:#F9FF00;--red:#FF0004;--white:#fff;--off:#fafafa;--b:3px solid #1a1a1a;--bt:1px solid #1a1a1a}
+html{scroll-behavior:smooth}
+body{font-family:"Inter",sans-serif;background:var(--white);color:var(--black);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4,h5,h6{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:-.02em;line-height:1}
+img{display:block;max-width:100%}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--black)}
+
+/* REDESIGNED NAVIGATION SYSTEM TO MATCH MAIN PAGE */
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--white);border-bottom:var(--b)}
+.nav-desktop{display:grid;grid-template-columns:repeat(12,1fr)}
+.nav-brand-w{grid-column:span 4;border-right:var(--b);padding:14px 24px;display:flex;align-items:center}
+.nav-brand{font-family:"Oswald",sans-serif;font-size:20px;font-weight:700;text-transform:uppercase;text-decoration:none;color:var(--black);letter-spacing:-.02em}
+.nav-links{grid-column:span 8;display:flex;align-items:stretch}
+.nav-link-btn{flex:1;text-align:center;padding:14px 16px;font-family:"Oswald",sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;border:none;border-right:var(--b);background:transparent;cursor:pointer;text-decoration:none;color:var(--black);display:flex;align-items:center;justify-content:center;transition:background .15s}
+.nav-link-btn:last-child{border-right:none}
+.nav-link-btn:hover{background:var(--yellow)}
+
+.nav-mobile-bar{display:none}
+.nav-mobile-links{display:none}
+
+/* NEW 1-COLUMN CENTERED HERO */
+#hero{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-bottom:var(--b);padding:120px 24px 60px;background:var(--white)}
+.hero-content{max-width:800px;display:flex;flex-direction:column;align-items:center}
+.badge{display:inline-block;background:var(--yellow);padding:5px 14px;font-family:"Oswald",sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;border:var(--b);margin-bottom:22px}
+.hero-title{font-size:clamp(40px,5.5vw,78px);font-weight:700;line-height:.92;letter-spacing:-.03em;margin-bottom:22px}
+.hero-title em{color:var(--red);font-style:normal}
+.hero-desc{font-size:14px;line-height:1.75;color:rgba(26,26,26,.72);max-width:540px;margin-bottom:28px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{font-family:"Oswald",sans-serif;text-transform:uppercase;font-size:12px;font-weight:700;letter-spacing:.06em;padding:13px 24px;border:var(--b);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.btn-y{background:var(--yellow);color:var(--black)}.btn-y:hover{background:var(--black);color:var(--yellow)}
+.btn-b{background:var(--black);color:var(--white)}.btn-b:hover{background:var(--white);color:var(--black)}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);border:var(--b);margin-top:44px;width:100%;max-width:500px}
+.stat{padding:14px;text-align:center;border-right:var(--b)}.stat:last-child{border-right:none}
+.stat-n{font-family:"Oswald",sans-serif;font-size:30px;font-weight:700}
+.stat-l{font-size:9px;text-transform:uppercase;letter-spacing:.18em;margin-top:3px}
+
+.ticker{background:var(--black);color:var(--yellow);border-top:var(--b);border-bottom:var(--b);padding:13px 0;overflow:hidden}
+.ticker-track{display:flex;animation:tick 28s linear infinite;white-space:nowrap}
+.ticker-item{font-family:"Oswald",sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;padding:0 36px;flex-shrink:0}
+.ticker-item::after{content:"\2736";margin-left:36px;color:var(--red)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+#gallery{padding:72px 0 56px;border-bottom:var(--b)}
+.sec-header{padding:0 48px 40px;display:flex;flex-direction:column;gap:28px}
+.sec-top{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.eyebrow{font-family:"Oswald",sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--red);margin-bottom:8px}
+.sec-title{font-size:clamp(34px,4vw,58px);font-weight:700;letter-spacing:-.03em}
+.sec-tools{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.view-ctl{display:flex;align-items:center;gap:10px}
+.view-lbl{font-family:"Oswald",sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.12em;opacity:.45}
+.vbtn{padding:7px 13px;border:var(--b);background:var(--white);cursor:pointer;font-family:"Oswald",sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;transition:background .15s}
+.vbtn.on{background:var(--black);color:var(--white)}.vbtn:not(.on):hover{background:var(--yellow)}
+.filter-bar{display:flex;flex-wrap:wrap;border:var(--b);width:fit-content}
+.fbtn{padding:9px 16px;font-family:"Oswald",sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border:none;border-right:var(--b);background:var(--white);color:var(--black);cursor:pointer;transition:background .15s,color .15s}
+.fbtn:last-child{border-right:none}.fbtn:hover{background:var(--black);color:var(--white)}.fbtn.on{background:var(--yellow);color:var(--black)}
+.filter-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.vis-count{font-family:"Oswald",sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.1em;opacity:.45}
+
+/* SINGLE UNIFIED GALLERY SECTION */
+.cat-sec{padding:0 48px 44px}.cat-sec.hide{display:none}
+.art-grid{display:grid;grid-template-columns:repeat(3,1fr);border:var(--b)}
+.art-grid.v2{grid-template-columns:repeat(2,1fr)}.art-grid.v4{grid-template-columns:repeat(4,1fr)}
+.card{position:relative;border:2px solid var(--black);cursor:pointer;overflow:hidden;background:var(--black)}
+.card.wide{grid-column:span 2}
+.card.hide{display:none !important}
+.card-img-w{position:relative;overflow:hidden}
+.card.wide .card-img-w{aspect-ratio:2/1}.card:not(.wide) .card-img-w{aspect-ratio:3/4}
+.card-img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.25,.46,.45,.94),filter .4s;will-change:transform}
+.card:hover .card-img{transform:scale(1.07);filter:saturate(0)}
+.card-ov{position:absolute;inset:0;background:rgba(255,0,4,0);transition:background .33s;pointer-events:none}
+.card:hover .card-ov{background:rgba(255,0,4,.88)}
+.card-info{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s;pointer-events:none}
+.card:hover .card-info{opacity:1;transform:translateY(0)}
+.ci-title{font-family:"Oswald",sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1;margin-bottom:5px}
+.ci-artist{font-family:"Inter",sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.8);margin-bottom:3px}
+.ci-med{font-family:"Inter",sans-serif;font-size:9px;color:rgba(255,255,255,.52);margin-bottom:5px}
+.ci-dim{font-family:"Inter",sans-serif;font-size:9px;font-weight:600;color:var(--yellow)}
+.card-arrow{position:absolute;top:14px;right:14px;color:#fff;opacity:0;transform:translate(-4px,4px);transition:opacity .3s,transform .3s;font-size:18px}
+.card:hover .card-arrow{opacity:1;transform:translate(0,0)}
+.card-flash{position:absolute;inset:0;border:5px solid var(--red);pointer-events:none;opacity:0;transition:opacity .28s}
+.card:hover .card-flash{opacity:1}
+.card-label{border-top:var(--b);background:var(--white);padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:7px}
+.cl-name{font-family:"Oswald",sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.15}
+.cl-sub{font-family:"Inter",sans-serif;font-size:9px;text-transform:uppercase;color:rgba(26,26,26,.4);margin-top:2px}
+.cl-cat{font-family:"Inter",sans-serif;font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;border:var(--bt);padding:3px 6px;background:var(--off);white-space:nowrap;flex-shrink:0}
+
+.gal-ctrl{padding:36px 48px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-top:var(--b);flex-wrap:wrap}
+.gal-prog{display:flex;align-items:center;gap:14px}
+.prog-bar{width:180px;height:5px;background:rgba(26,26,26,.12);border:var(--bt)}
+.prog-fill{height:100%;background:var(--black);transition:width .4s}
+.prog-lbl{font-family:"Inter",sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.1em;opacity:.45}
+
+#lb{position:fixed;inset:0;z-index:999;background:rgba(26,26,26,.97);display:none;align-items:center;justify-content:center;padding:18px}
+#lb.open{display:flex}
+.lb-inner{display:grid;grid-template-columns:1fr 340px;max-width:1160px;width:100%;max-height:92vh;border:var(--b);background:var(--black);overflow:hidden;animation:su .28s ease}
+@keyframes su{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.lb-img-w{position:relative;overflow:hidden;background:#111}
+.lb-img{width:100%;height:100%;object-fit:contain;display:block;max-height:92vh}
+.lb-close{position:absolute;top:14px;right:14px;background:var(--white);border:var(--b);width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:background .15s;z-index:10}
+.lb-close:hover{background:var(--yellow)}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);color:#fff;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:background .15s}
+.lb-nav:hover{background:rgba(255,255,255,.22)}
+#lbprev{left:10px}#lbnext{right:10px}
+.lb-panel{background:var(--white);border-left:var(--b);display:flex;flex-direction:column;overflow-y:auto}
+.lb-ph{padding:24px 22px 18px;border-bottom:var(--b)}
+.lb-cat{font-family:"Oswald",sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--red);margin-bottom:9px}
+.lb-title{font-size:20px;font-weight:700;line-height:1.05;margin-bottom:7px}
+.lb-artist{font-family:"Inter",sans-serif;font-size:13px;font-weight:600;color:rgba(26,26,26,.65);text-transform:uppercase;letter-spacing:.05em}
+.lb-meta{padding:18px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
+.lb-row{display:flex;flex-direction:column;gap:3px;padding-bottom:12px;border-bottom:var(--bt)}
+.lb-row:last-child{border-bottom:none;padding-bottom:0}
+.lb-key{font-family:"Oswald",sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:rgba(26,26,26,.38)}
+.lb-val{font-family:"Inter",sans-serif;font-size:13px;font-weight:500}
+.lb-acts{padding:18px 22px;border-top:var(--b);display:flex;flex-direction:column;gap:9px}
+
+#artists{padding:72px 0;border-bottom:var(--b);background:var(--off)}
+.art-hdr{padding:0 48px 44px}
+.art-tw{padding:0 48px;overflow-x:auto}
+.art-tbl{border:var(--b);min-width:760px;width:100%}
+.th{display:grid;grid-template-columns:2.4fr 2fr 1.4fr 1.4fr 2fr;background:var(--black);color:#fff;border-bottom:var(--b)}
+.thc{padding:13px 18px;font-family:"Oswald",sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;border-right:3px solid rgba(255,255,255,.12)}
+.thc:last-child{border-right:none}
+.tr{display:grid;grid-template-columns:2.4fr 2fr 1.4fr 1.4fr 2fr;border-bottom:var(--b);transition:background .15s;cursor:pointer}
+.tr:last-child{border-bottom:none}
+.tr:nth-child(even){background:var(--white)}.tr:nth-child(odd){background:var(--off)}.tr:hover{background:var(--yellow)}
+.tc{padding:16px 18px;font-family:"Inter",sans-serif;font-size:12px;border-right:var(--b);display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.tc:last-child{border-right:none}
+.tc.nm{font-family:"Oswald",sans-serif;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+.sbadge{font-family:"Inter",sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border:2px solid;padding:2px 7px}
+.sbadge.rep{background:#d4edda;color:#1a5e2a;border-color:#1a5e2a}
+.sbadge.res{background:#fff3cd;color:#6b4c00;border-color:#a97b00}
+.sbadge.gst{background:#fde8e8;color:#8b0000;border-color:#c00}
+.stag{font-family:"Inter",sans-serif;font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;border:2px solid var(--black);padding:2px 6px;background:var(--white)}
+
+footer{background:var(--black);color:#fff;border-top:var(--b)}
+.ft-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;border-bottom:1px solid rgba(255,255,255,.1)}
+.fc{padding:44px 28px;border-right:1px solid rgba(255,255,255,.1)}.fc:last-child{border-right:none}
+.ft-logo{font-family:"Oswald",sans-serif;font-size:20px;font-weight:700;color:var(--yellow);text-transform:uppercase;margin-bottom:14px}
+.ft-desc{font-size:11px;color:rgba(255,255,255,.45);line-height:1.75}
+.ft-ct{font-family:"Oswald",sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--yellow);margin-bottom:14px}
+.fl{display:block;font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;margin-bottom:7px;transition:color .15s;cursor:pointer;background:none;border:none;text-align:left}
+.fl:hover{color:var(--yellow)}
+.ft-btm{padding:14px 28px;display:flex;align-items:center;justify-content:space-between}
+.ft-btm span{font-size:10px;color:rgba(255,255,255,.28)}
+
+/* FIX: REVEAL IS VISIBLE BY DEFAULT IN CASE OBSERVER IS BLOCKED */
+.reveal{opacity:1;transform:none;transition:opacity .55s ease,transform .55s ease}
+.reveal.vis{opacity:1;transform:none}
+
+@media(max-width:920px){
+  #hero{min-height:60vh;padding-top:100px}
+  .sec-header,.cat-sec,.gal-ctrl,.art-hdr,.art-tw{padding-left:18px;padding-right:18px}
+  .lb-inner{grid-template-columns:1fr;max-height:95vh}
+  .lb-panel{max-height:260px}
+  .ft-grid{grid-template-columns:1fr 1fr}
+  .art-grid{grid-template-columns:repeat(2,1fr)!important}
+  .card.wide{grid-column:span 2}
+}
+@media(max-width:768px){
+  .nav-desktop{display:none}
+  .nav-mobile-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px}
+  .nav-toggle{background:transparent;border:none;cursor:pointer;font-size:22px;color:var(--black);display:flex;align-items:center;justify-content:center}
+  .nav-mobile-links{display:none;flex-direction:column;border-top:var(--b);background:var(--white)}
+  .nav-mobile-link{padding:14px 20px;font-family:"Oswald",sans-serif;font-size:16px;font-weight:600;text-transform:uppercase;border:none;border-bottom:var(--bt);background:transparent;cursor:pointer;text-decoration:none;color:var(--black);text-align:left;display:block}
+  .nav-mobile-link:last-child{border-bottom:none}
+  .nav-mobile-link:hover{background:var(--yellow)}
+}
+@media(max-width:540px){
+  .art-grid{grid-template-columns:1fr!important}
+  .card.wide{grid-column:span 1}
+  .card.wide .card-img-w{aspect-ratio:3/4}
+  .ft-grid{grid-template-columns:1fr}
+  .filter-bar{flex-direction:column}
+  .fbtn{border-right:none;border-bottom:var(--b)}.fbtn:last-child{border-bottom:none}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <!-- Desktop Nav -->
+  <div class="nav-desktop">
+    <div class="nav-brand-w">
+      <a href="./" class="nav-brand">Obsidian Arts</a>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link-btn" onclick="goTo('gallery')">Gallery</button>
+      <button class="nav-link-btn" onclick="goTo('artists')">Artists</button>
+      <a href="./" class="nav-link-btn">&larr; Home</a>
+    </div>
+  </div>
+  <!-- Mobile Nav -->
+  <div class="nav-mobile-bar">
+    <a href="./" class="nav-brand">Obsidian Arts</a>
+    <button class="nav-toggle" onclick="toggleMenu()">
+      <span id="nav-toggle-icon">&#9776;</span>
+    </button>
+  </div>
+  <div class="nav-mobile-links" id="mobile-links">
+    <button class="nav-mobile-link" onclick="goTo('gallery');toggleMenu()">Gallery</button>
+    <button class="nav-mobile-link" onclick="goTo('artists');toggleMenu()">Artists</button>
+    <a href="./" class="nav-mobile-link">&larr; Home</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-content">
+    <div class="badge">Full Case Exhibition &mdash; 2026</div>
+    <h1 class="hero-title">AVAILABLE ARTS<br><em>&amp;</em><br>FULL GALLERY</h1>
+    <p class="hero-desc">A landmark survey of AI-generated masterworks spanning painting, digital media, sculpture, photography, landscapes, and figurative work. Each piece curated for compositional excellence and visual balance.</p>
+    <div class="hero-btns">
+      <button class="btn btn-y" onclick="goTo('gallery')">Explore Gallery &darr;</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">50</div><div class="stat-l">Artworks</div></div>
+      <div class="stat"><div class="stat-n">10</div><div class="stat-l">Artists</div></div>
+      <div class="stat"><div class="stat-n">6</div><div class="stat-l">Mediums</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Obsidian Arts</span><span class="ticker-item">Available Arts &amp; Gallery</span><span class="ticker-item">AI Generated</span><span class="ticker-item">Full Case Exhibition</span><span class="ticker-item">10 Represented Artists</span><span class="ticker-item">Gallery Collection 2026</span><span class="ticker-item">Berlin &amp; New York</span>
+    <span class="ticker-item">Obsidian Arts</span><span class="ticker-item">Available Arts &amp; Gallery</span><span class="ticker-item">AI Generated</span><span class="ticker-item">Full Case Exhibition</span><span class="ticker-item">10 Represented Artists</span><span class="ticker-item">Gallery Collection 2026</span><span class="ticker-item">Berlin &amp; New York</span>
+  </div>
+</div>
+
+<section id="gallery">
+  <div class="sec-header">
+    <div class="sec-top">
+      <div>
+        <p class="eyebrow">The Permanent Collection</p>
+        <h2 class="sec-title">Gallery Collection</h2>
+      </div>
+      <div class="sec-tools">
+        <div class="view-ctl">
+          <span class="view-lbl">View:</span>
+          <button class="vbtn" id="v2" onclick="setView(2)">2 Col</button>
+          <button class="vbtn on" id="v3" onclick="setView(3)">3 Col</button>
+          <button class="vbtn" id="v4" onclick="setView(4)">4 Col</button>
+        </div>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="filter-bar">
+        <button class="fbtn on" id="f-all" onclick="setFilter('all')">All Works</button>
+        <button class="fbtn" id="f-painting" onclick="setFilter('painting')">Paintings</button>
+        <button class="fbtn" id="f-digital" onclick="setFilter('digital')">Digital</button>
+        <button class="fbtn" id="f-photography" onclick="setFilter('photography')">Photography</button>
+        <button class="fbtn" id="f-sculpture" onclick="setFilter('sculpture')">Sculpture</button>
+        <button class="fbtn" id="f-landscape" onclick="setFilter('landscape')">Landscapes</button>
+        <button class="fbtn" id="f-portrait" onclick="setFilter('portrait')">Portraits</button>
+      </div>
+      <span class="vis-count" id="vc">Showing 50 of 50</span>
+    </div>
+  </div>
+
+  <!-- SINGLE UNIFIED GALLERY GRID WITH ALL IMAGES -->
+  <div class="cat-sec reveal" id="s-gallery">
+    <div class="art-grid" id="g-main"></div>
+  </div>
+
+  <div class="gal-ctrl">
+    <div class="gal-prog">
+      <div class="prog-bar"><div class="prog-fill" id="pf" style="width:100%"></div></div>
+      <span class="prog-lbl" id="pl">50 / 50 Works</span>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-y" onclick="setFilter('all')">Reset Filter</button>
+    </div>
+  </div>
+</section>
+
+<section id="artists">
+  <div class="art-hdr"><p class="eyebrow">Representative Gallery Roster</p><h2 class="sec-title">Represented Artists</h2></div>
+  <div class="art-tw"><div class="art-tbl">
+    <div class="th"><div class="thc">Artist Name</div><div class="thc">Primary Medium</div><div class="thc">Affiliation</div><div class="thc">Next Exhibition</div><div class="thc">Specialties</div></div>
+    <div id="atbody"></div>
+  </div></div>
+</section>
+
+<div id="lb">
+  <div class="lb-inner">
+    <div class="lb-img-w" style="position:relative">
+      <button class="lb-close" onclick="closeLb()">&#x2715;</button>
+      <button class="lb-nav" id="lbprev" onclick="navLb(-1)">&#8249;</button>
+      <img id="lb-img" class="lb-img" src="" alt=""/>
+      <button class="lb-nav" id="lbnext" onclick="navLb(1)">&#8250;</button>
+    </div>
+    <div class="lb-panel">
+      <div class="lb-ph"><p class="lb-cat" id="lbcat"></p><h3 class="lb-title" id="lbtitle"></h3><p class="lb-artist" id="lbartist"></p></div>
+      <div class="lb-meta">
+        <div class="lb-row"><span class="lb-key">Year</span><span class="lb-val" id="lbyear"></span></div>
+        <div class="lb-row"><span class="lb-key">Medium</span><span class="lb-val" id="lbmed"></span></div>
+        <div class="lb-row"><span class="lb-key">Dimensions</span><span class="lb-val" id="lbdims"></span></div>
+        <div class="lb-row"><span class="lb-key">Collection</span><span class="lb-val" id="lbcoll"></span></div>
+        <div class="lb-row"><span class="lb-key">Status</span><span class="lb-val" id="lbstat"></span></div>
+      </div>
+      <div class="lb-acts">
+        <button class="btn btn-y" style="width:100%;justify-content:center" onclick="goTo('gallery');closeLb()">Back to Gallery</button>
+        <a href="./#inquiry" class="btn btn-b" style="width:100%;justify-content:center;text-align:center">Inquire for Acquisition</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-grid">
+    <div class="fc"><div class="ft-logo">Obsidian Arts</div><p class="ft-desc">A contemporary vanguard space showcasing boundary-pushing fine art, sculpture, digital media, and AI-generated works. Based in Berlin &amp; New York.</p></div>
+    <div class="fc"><div class="ft-ct">Explore</div><button class="fl" onclick="goTo('gallery')">Gallery</button><button class="fl" onclick="goTo('artists')">Artists</button><a href="./" class="fl">Home</a></div>
+    <div class="fc"><div class="ft-ct">Mediums</div><span class="fl">Painting &amp; Canvas</span><span class="fl">Digital &amp; New Media</span><span class="fl">Landscape &amp; Environment</span><span class="fl">Photography</span><span class="fl">Sculpture &amp; Form</span><span class="fl">Figurative &amp; Portraits</span></div>
+    <div class="fc"><div class="ft-ct">Social</div><span class="fl">Instagram</span><span class="fl">Artsy</span><span class="fl">MutualArt</span><span class="fl">LinkedIn</span></div>
+  </div>
+  <div class="ft-btm"><span>&copy; 2026 Obsidian Arts. All Rights Reserved.</span><span>Full Case Exhibition &mdash; AI Generative Collection</span></div>
+</footer>
+
+<script>
+const AW=[{"id":1,"sec":"painting","title":"GOLDEN RUINS OF MNEMOTH","artist":"ELENA VASQUEZ","year":"2026","cat":"PAINTING & CANVAS","med":"AI Oil Painting / Archival Pigment Print","dims":"180 x 240 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80"},{"id":2,"sec":"painting","title":"CHROMATIC DISSOLUTION II","artist":"YUKI TANAKA","year":"2025","cat":"PAINTING & CANVAS","med":"Generative Acrylic on Digital Canvas","dims":"150 x 200 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&q=80"},{"id":3,"sec":"painting","title":"NEOMONDRIAN GRID VII","artist":"ELENA VASQUEZ","year":"2026","cat":"PAINTING & CANVAS","med":"Acrylic and Archival Ink on Canvas","dims":"160 x 160 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?w=800&q=80"},{"id":4,"sec":"painting","title":"SCARLET FIELD STUDY","artist":"AMARA DIOP","year":"2026","cat":"PAINTING & CANVAS","med":"Mixed Media Digital Impasto","dims":"200 x 150 cm","coll":"Guest Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?w=800&q=80"},{"id":5,"sec":"painting","title":"FRACTURED MONUMENT","artist":"MARCUS CHEN","year":"2025","cat":"PAINTING & CANVAS","med":"Generative Geometry / AI Render","dims":"120 x 180 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=800&q=80"},{"id":6,"sec":"painting","title":"WEIGHT OF AMBER","artist":"YUKI TANAKA","year":"2026","cat":"PAINTING & CANVAS","med":"Oil Painting Study on Linen","dims":"180 x 130 cm","coll":"Guest Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=800&q=80"},{"id":7,"sec":"painting","title":"STRUCTURE AND MEMORY","artist":"SOPHIE ANDERSSON","year":"2026","cat":"PAINTING & CANVAS","med":"Mixed Media and Gesso on Canvas","dims":"200 x 180 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80"},{"id":8,"sec":"painting","wide":1,"title":"PANORAMA OF COLLAPSED TIME","artist":"ELENA VASQUEZ","year":"2026","cat":"PAINTING & CANVAS","med":"AI Oil on Canvas Panoramic Format","dims":"400 x 200 cm","coll":"Permanent Collection","stat":"Museum Acquisition Only","img":"https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80"},{"id":9,"sec":"painting","title":"VIOLET TENSION FIELD","artist":"JAMES O'BRIEN","year":"2025","cat":"PAINTING & CANVAS","med":"Generative Ink and Digital Canvas","dims":"140 x 200 cm","coll":"Guest Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1549490349-8643362247b5?w=800&q=80"},{"id":10,"sec":"painting","title":"DUSK HARMONIC I","artist":"AMARA DIOP","year":"2026","cat":"PAINTING & CANVAS","med":"Acrylic on Raw Canvas","dims":"160 x 220 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1484406566174-9da000fda645?w=800&q=80"},{"id":11,"sec":"digital","title":"OBSIDIAN MONOLITH PRIME","artist":"MARCUS CHEN","year":"2026","cat":"DIGITAL & NEW MEDIA","med":"AI Generative Code / LED Panel","dims":"Variable","coll":"Digital Edition","stat":"Edition of 10","img":"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80"},{"id":12,"sec":"digital","title":"AURORA SEQUENCE III","artist":"MARCUS CHEN","year":"2026","cat":"DIGITAL & NEW MEDIA","med":"AI Generative / Animated Print","dims":"Variable","coll":"Digital Edition","stat":"Edition of 5","img":"https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80"},{"id":13,"sec":"digital","title":"NEON LABYRINTH VII","artist":"MARCUS CHEN","year":"2026","cat":"DIGITAL & NEW MEDIA","med":"Generative Software / Plotter Drawing","dims":"Variable","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800&q=80"},{"id":14,"sec":"digital","title":"QUANTUM MANDALA IX","artist":"YUKI TANAKA","year":"2025","cat":"DIGITAL & NEW MEDIA","med":"Generative Geometry / Fine Art Print","dims":"120 x 120 cm","coll":"Digital Edition","stat":"Edition of 12","img":"https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&q=80"},{"id":15,"sec":"digital","title":"NEON ABSTRACTION PLANE","artist":"MARCUS CHEN","year":"2026","cat":"DIGITAL & NEW MEDIA","med":"Hard-Edge Digital / LED Display","dims":"Variable","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80"},{"id":16,"sec":"digital","title":"GLITCH MATRIX ALPHA","artist":"JAMES O'BRIEN","year":"2025","cat":"DIGITAL & NEW MEDIA","med":"Generative Code / Archival Print","dims":"Variable","coll":"Digital Edition","stat":"Edition of 8","img":"https://images.unsplash.com/photo-1604871000636-074fa5117945?w=800&q=80"},{"id":17,"sec":"digital","title":"ELECTRIC TOPOLOGY IV","artist":"SOPHIE ANDERSSON","year":"2026","cat":"DIGITAL & NEW MEDIA","med":"Code Art / Archival Pigment Print","dims":"200 x 120 cm","coll":"Digital Edition","stat":"Edition of 6","img":"https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200&q=80"},{"id":18,"sec":"digital","title":"SYNAPSE BLOOM","artist":"CARLOS MENDES","year":"2026","cat":"DIGITAL & NEW MEDIA","med":"AI Neural Net / Fine Art Print","dims":"Variable","coll":"Digital Edition","stat":"Edition of 10","img":"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80"},{"id":19,"sec":"digital","wide":1,"title":"DEEP FIELD RESONANCE","artist":"MARCUS CHEN","year":"2026","cat":"DIGITAL & NEW MEDIA","med":"Generative Code / Large Format Print","dims":"Variable","coll":"Permanent Collection","stat":"Museum Acquisition Only","img":"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1200&q=80"},{"id":20,"sec":"digital","title":"FRACTURED LIGHT ARRAY","artist":"NATASHA IVANOVA","year":"2025","cat":"DIGITAL & NEW MEDIA","med":"LED Array / Kinetic Installation","dims":"Variable","coll":"Digital Edition","stat":"Edition of 3","img":"https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&q=80"},{"id":21,"sec":"landscape","title":"DESERT SENTINEL","artist":"AMARA DIOP","year":"2026","cat":"LANDSCAPE & ENVIRONMENT","med":"AI Hyperrealistic Painting","dims":"200 x 150 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=800&q=80"},{"id":22,"sec":"landscape","title":"CRYSTAL FOREST NOCTURNE","artist":"ELENA VASQUEZ","year":"2025","cat":"LANDSCAPE & ENVIRONMENT","med":"AI Surrealist Landscape","dims":"180 x 240 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80"},{"id":23,"sec":"landscape","title":"VOLCANIC CONVERGENCE","artist":"JAMES O'BRIEN","year":"2026","cat":"LANDSCAPE & ENVIRONMENT","med":"Epic Scale Digital Landscape","dims":"300 x 200 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"},{"id":24,"sec":"landscape","title":"ARCTIC CATHEDRAL I","artist":"SOPHIE ANDERSSON","year":"2026","cat":"LANDSCAPE & ENVIRONMENT","med":"AI Hyperrealistic Ice Landscape","dims":"240 x 180 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80"},{"id":25,"sec":"landscape","title":"UNDERWATER EDEN","artist":"AMARA DIOP","year":"2025","cat":"LANDSCAPE & ENVIRONMENT","med":"Subaquatic AI Landscape","dims":"200 x 160 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=800&q=80"},{"id":26,"sec":"landscape","title":"CRIMSON HORIZON","artist":"ELENA VASQUEZ","year":"2026","cat":"LANDSCAPE & ENVIRONMENT","med":"AI Nebula / Fine Art Print","dims":"250 x 150 cm","coll":"Digital Edition","stat":"Edition of 7","img":"https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=800&q=80"},{"id":27,"sec":"landscape","title":"STORM MERIDIAN","artist":"XAVIER ROTH","year":"2026","cat":"LANDSCAPE & ENVIRONMENT","med":"AI Epic Landscape","dims":"220 x 180 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=800&q=80"},{"id":28,"sec":"landscape","wide":1,"title":"PRIMORDIAL CANYON","artist":"AMARA DIOP","year":"2025","cat":"LANDSCAPE & ENVIRONMENT","med":"Panoramic AI Render / Pigment Print","dims":"500 x 200 cm","coll":"Museum Collection","stat":"Museum Acquisition Only","img":"https://images.unsplash.com/photo-1560275619-4cc5fa59d3ae?w=1200&q=80"},{"id":29,"sec":"landscape","title":"GLACIAL DUSK","artist":"SOPHIE ANDERSSON","year":"2025","cat":"LANDSCAPE & ENVIRONMENT","med":"AI Landscape / Archival Print","dims":"180 x 120 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1502472584811-0a2f2feb8968?w=800&q=80"},{"id":30,"sec":"landscape","title":"GOLDEN HOUR EXPANSE","artist":"XAVIER ROTH","year":"2026","cat":"LANDSCAPE & ENVIRONMENT","med":"AI Oil Landscape Study","dims":"200 x 150 cm","coll":"Guest Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80"},{"id":31,"sec":"photography","title":"SILK BLOOM STUDY I","artist":"AMARA DIOP","year":"2026","cat":"AVANT-GARDE PHOTOGRAPHY","med":"AI Macro / Archival Pigment Print","dims":"100 x 140 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800&q=80"},{"id":32,"sec":"photography","title":"ABSTRACT FLUX VI","artist":"JAMES O'BRIEN","year":"2025","cat":"AVANT-GARDE PHOTOGRAPHY","med":"AI Fluid Dynamics / Archival Print","dims":"120 x 160 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80"},{"id":33,"sec":"photography","title":"SURREAL STILL LIFE III","artist":"AMARA DIOP","year":"2026","cat":"AVANT-GARDE PHOTOGRAPHY","med":"Giclee Fine Art Print","dims":"100 x 150 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80"},{"id":34,"sec":"photography","title":"FROZEN MOMENT IV","artist":"JAMES O'BRIEN","year":"2026","cat":"AVANT-GARDE PHOTOGRAPHY","med":"Archival Pigment Print","dims":"120 x 180 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1511629091441-ee46146481b6?w=800&q=80"},{"id":35,"sec":"photography","title":"SHADOW GRID COMPOSITION","artist":"JAMES O'BRIEN","year":"2025","cat":"AVANT-GARDE PHOTOGRAPHY","med":"Archival Pigment Print","dims":"150 x 100 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?w=800&q=80"},{"id":36,"sec":"photography","title":"PRISM LIGHT STUDY II","artist":"AMARA DIOP","year":"2025","cat":"AVANT-GARDE PHOTOGRAPHY","med":"AI Fine Art Print","dims":"120 x 120 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=800&q=80"},{"id":37,"sec":"photography","title":"DOUBLE EXPOSURE — RAIN","artist":"JAMES O'BRIEN","year":"2026","cat":"AVANT-GARDE PHOTOGRAPHY","med":"AI Double Exposure / Archival Print","dims":"100 x 150 cm","coll":"Guest Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&q=80"},{"id":38,"sec":"photography","title":"VAPOR GEOMETRY","artist":"AMARA DIOP","year":"2026","cat":"AVANT-GARDE PHOTOGRAPHY","med":"Smoke Art / Fine Art Print","dims":"80 x 120 cm","coll":"Permanent Collection","stat":"Edition of 20","img":"https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80"},{"id":39,"sec":"photography","title":"MINERAL CASCADE","artist":"JAMES O'BRIEN","year":"2025","cat":"AVANT-GARDE PHOTOGRAPHY","med":"Macro Mineral Photography","dims":"100 x 100 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1509909756405-be0199881695?w=800&q=80"},{"id":40,"sec":"photography","title":"LUMINANCE BURST","artist":"AMARA DIOP","year":"2026","cat":"AVANT-GARDE PHOTOGRAPHY","med":"AI Light Photography / Archival Print","dims":"120 x 160 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1465101162946-4377e57745c3?w=800&q=80"},{"id":41,"sec":"sculpture","title":"VOID AXIS MONOLITH II","artist":"SOPHIE ANDERSSON","year":"2026","cat":"SCULPTURE & FORM","med":"Welded Powder-Coated Steel","dims":"240 x 80 x 80 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=800&q=80"},{"id":42,"sec":"sculpture","title":"GEOMETRIC DISSOLUTION","artist":"SOPHIE ANDERSSON","year":"2025","cat":"SCULPTURE & FORM","med":"Welded Steel and Concrete","dims":"190 x 60 x 60 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1544967082-d9d25d867d66?w=800&q=80"},{"id":43,"sec":"sculpture","title":"MASS AND TENSION III","artist":"YUKI TANAKA","year":"2026","cat":"SCULPTURE & FORM","med":"Cast Aluminum and Oak","dims":"160 x 40 x 40 cm","coll":"Guest Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?w=800&q=80"},{"id":44,"sec":"sculpture","title":"CONCRETE VORTEX","artist":"SOPHIE ANDERSSON","year":"2026","cat":"SCULPTURE & FORM","med":"Cast Concrete and Rebar","dims":"120 x 120 x 120 cm","coll":"Museum Collection","stat":"Museum Acquisition Only","img":"https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=800&q=80"},{"id":45,"sec":"sculpture","title":"GRID & AXIS FORM IV","artist":"YUKI TANAKA","year":"2025","cat":"SCULPTURE & FORM","med":"Welded Steel and Oak Base","dims":"200 x 50 x 50 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1541367777708-7905fe3296c0?w=800&q=80"},{"id":46,"sec":"portrait","title":"ANCIENT GODDESS I","artist":"ELENA VASQUEZ","year":"2026","cat":"FIGURATIVE & PORTRAITS","med":"AI Oil Portrait Painting","dims":"120 x 180 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"},{"id":47,"sec":"portrait","title":"THE STORM SENTINEL","artist":"JAMES O'BRIEN","year":"2026","cat":"FIGURATIVE & PORTRAITS","med":"Epic Figurative AI Painting","dims":"180 x 240 cm","coll":"Permanent Collection","stat":"Not for Sale","img":"https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80"},{"id":48,"sec":"portrait","title":"DISSOLUTION FIGURE I","artist":"MARCUS CHEN","year":"2025","cat":"FIGURATIVE & PORTRAITS","med":"AI Digital Portrait / Print","dims":"Variable","coll":"Digital Edition","stat":"Edition of 5","img":"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"},{"id":49,"sec":"portrait","title":"WARRIOR OF DUSK","artist":"AMARA DIOP","year":"2026","cat":"FIGURATIVE & PORTRAITS","med":"AI Figurative Oil Painting","dims":"150 x 200 cm","coll":"Permanent Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"},{"id":50,"sec":"portrait","title":"TRANSCENDENCE — STUDY III","artist":"LENA WOLFF","year":"2026","cat":"FIGURATIVE & PORTRAITS","med":"AI Mixed Media Portrait","dims":"100 x 150 cm","coll":"Guest Collection","stat":"Available for Acquisition","img":"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80"}];
+const ARTISTS=[{"name":"ELENA VASQUEZ","med":"Painting & Canvas","st":"Represented","av":"Solo (July 2026)","sp":["Acrylic","Portraiture","Murals"]},{"name":"MARCUS CHEN","med":"Digital & New Media","st":"Resident","av":"Group (Aug 2026)","sp":["Generative","LED Array","Code Art"]},{"name":"SOPHIE ANDERSSON","med":"Sculpture & Form","st":"Guest Artist","av":"Solo (Oct 2026)","sp":["Minimalist","Steel","Concrete"]},{"name":"JAMES O'BRIEN","med":"Avant-Garde Photography","st":"Represented","av":"Permanent Coll.","sp":["Archival","Contrast","Mono"]},{"name":"YUKI TANAKA","med":"Mixed Media & Digital","st":"Represented","av":"Group (July 2026)","sp":["Gesso","Canvas","Textures"]},{"name":"AMARA DIOP","med":"Photography & Prints","st":"Resident","av":"Solo (Nov 2026)","sp":["Color","Landscape","Portraiture"]},{"name":"XAVIER ROTH","med":"Landscape & Environment","st":"Guest Artist","av":"Residency 2027","sp":["Epic Scale","Nature","AI Render"]},{"name":"NATASHA IVANOVA","med":"Abstract Digital","st":"Represented","av":"Group (Sep 2026)","sp":["Geometry","Neon","Hard-Edge"]},{"name":"CARLOS MENDES","med":"Generative & Code Art","st":"Resident","av":"Solo (Dec 2026)","sp":["Algorithms","Plotter","Data Art"]},{"name":"LENA WOLFF","med":"Figurative & Oil","st":"Guest Artist","av":"Group (Oct 2026)","sp":["Oil Painting","Figures","Narrative"]}];
+let lbIdx=0,curF='all';
+document.addEventListener('DOMContentLoaded',()=>{buildGrid();buildArtists();initNav();initReveal();initLinks();});
+
+function initLinks(){
+  if(window.location.protocol === 'file:') {
+    document.querySelectorAll('a').forEach(a => {
+      const href = a.getAttribute('href');
+      if (href) {
+        if (href === './index.html' || href === 'index.html' || href === './' || href === '/') {
+          a.href = 'http://localhost:3000/';
+        } else if (href.startsWith('./#') || href.startsWith('#')) {
+          a.href = 'http://localhost:3000/' + href.substring(href.indexOf('#'));
+        }
+      }
+    });
+  }
+}
+
+function toggleMenu(){
+  const el = document.getElementById('mobile-links');
+  const icon = document.getElementById('nav-toggle-icon');
+  if(!el) return;
+  if(el.style.display === 'flex') {
+    el.style.display = 'none';
+    icon.innerHTML = '&#9776;';
+  } else {
+    el.style.display = 'flex';
+    icon.innerHTML = '&#10005;'; // X mark
+  }
+}
+
+function buildGrid(){
+  const g=document.getElementById('g-main');if(!g)return;
+  g.innerHTML='';
+  AW.forEach((a,idx)=>{
+    const c=document.createElement('div');
+    c.className='card'+(a.wide?' wide':'');
+    c.dataset.sec=a.sec;
+    c.dataset.idx=idx;
+    const cs=a.cat.replace('& NEW MEDIA','').replace('& CANVAS','').replace('AVANT-GARDE ','').replace('& FORM','').replace('& PORTRAITS','').trim();
+    c.innerHTML='<div class="card-img-w"><img class="card-img" src="'+a.img+'" alt="'+a.title+'" loading="lazy"/>'
+      +'<div class="card-ov"></div>'
+      +'<div class="card-info"><div class="ci-title">'+a.title+'</div><div class="ci-artist">'+a.artist+' · '+a.year+'</div><div class="ci-med">'+a.med+'</div><div class="ci-dim">'+a.dims+'</div></div>'
+      +'<div class="card-arrow">↗</div><div class="card-flash"></div></div>'
+      +'<div class="card-label"><div><div class="cl-name">'+a.artist+'</div><div class="cl-sub">'+a.title+' ('+a.year+')</div></div><span class="cl-cat">'+cs+'</span></div>';
+    c.addEventListener('click',()=>openLb(idx));
+    g.appendChild(c);
+  });
+  updateCount();
+}
+
+function setFilter(f){
+  curF=f;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
+  const fb=document.getElementById('f-'+f);if(fb)fb.classList.add('on');
+  
+  const cards = document.querySelectorAll('#g-main .card');
+  cards.forEach(c => {
+    if(f === 'all' || c.dataset.sec === f) {
+      c.classList.remove('hide');
+    } else {
+      c.classList.add('hide');
+    }
+  });
+  updateCount();
+}
+
+function showAll(){setFilter('all');goTo('gallery');}
+
+function updateCount(){
+  const cards = document.querySelectorAll('#g-main .card');
+  let n = 0;
+  cards.forEach(c => {
+    if(!c.classList.contains('hide')) n++;
+  });
+  const vc=document.getElementById('vc');if(vc)vc.textContent='Showing '+n+' of 50';
+  const pl=document.getElementById('pl');if(pl)pl.textContent=n+' / 50 Works';
+  const pf=document.getElementById('pf');if(pf)pf.style.width=(n/50*100)+'%';
+}
+
+function setView(n){
+  document.querySelectorAll('.art-grid').forEach(g=>{g.classList.remove('v2','v4');if(n===2)g.classList.add('v2');if(n===4)g.classList.add('v4');});
+  ['v2','v3','v4'].forEach(id=>{const b=document.getElementById(id);if(b)b.classList.toggle('on',id==='v'+n);});
+}
+
+function openLb(idx){
+  const visibleCards = Array.from(document.querySelectorAll('#g-main .card:not(.hide)'));
+  if (visibleCards.length === 0) return;
+  const targetCard = document.querySelector('#g-main .card[data-idx="'+idx+'"]');
+  lbIdx = visibleCards.indexOf(targetCard);
+  if (lbIdx === -1) lbIdx = 0;
+  
+  renderLb();
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeLb(){document.getElementById('lb').classList.remove('open');document.body.style.overflow='';}
+
+function navLb(d){
+  const visibleCards = Array.from(document.querySelectorAll('#g-main .card:not(.hide)'));
+  if (visibleCards.length === 0) return;
+  lbIdx = (lbIdx + d + visibleCards.length) % visibleCards.length;
+  renderLb();
+}
+
+function renderLb(){
+  const visibleCards = Array.from(document.querySelectorAll('#g-main .card:not(.hide)'));
+  if (visibleCards.length === 0) return;
+  const card = visibleCards[lbIdx];
+  const globalIdx = parseInt(card.dataset.idx);
+  const a=AW[globalIdx];
+  
+  const img=document.getElementById('lb-img');img.src=a.img;img.alt=a.title;
+  document.getElementById('lbcat').textContent=a.cat;
+  document.getElementById('lbtitle').textContent=a.title;
+  document.getElementById('lbartist').textContent=a.artist;
+  document.getElementById('lbyear').textContent=a.year;
+  document.getElementById('lbmed').textContent=a.med;
+  document.getElementById('lbdims').textContent=a.dims;
+  document.getElementById('lbcoll').textContent=a.coll;
+  document.getElementById('lbstat').textContent=a.stat;
+}
+
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('lb').classList.contains('open'))return;
+  if(e.key==='Escape')closeLb();
+  if(e.key==='ArrowLeft')navLb(-1);
+  if(e.key==='ArrowRight')navLb(1);
+});
+
+document.getElementById('lb').addEventListener('click',function(e){if(e.target===this)closeLb();});
+
+function buildArtists(){
+  const tb=document.getElementById('atbody');if(!tb)return;
+  ARTISTS.forEach(a=>{
+    const sc=a.st==='Represented'?'rep':a.st==='Resident'?'res':'gst';
+    const r=document.createElement('div');r.className='tr';
+    r.innerHTML='<div class="tc nm">'+a.name+'</div><div class="tc">'+a.med+'</div><div class="tc"><span class="sbadge '+sc+'">'+a.st+'</span></div><div class="tc"><span class="sbadge '+sc+'">'+a.av+'</span></div><div class="tc">'+a.sp.map(s=>'<span class="stag">'+s+'</span>').join('')+'</div>';
+    tb.appendChild(r);
+  });
+}
+
+function initNav(){
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>50));
+}
+
+function goTo(id){const e=document.getElementById(id);if(e)e.scrollIntoView({behavior:'smooth'});}
+
+function initReveal(){
+  const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});},{threshold:.07});
+  document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
+}
+</script>
+</body>
+</html>
