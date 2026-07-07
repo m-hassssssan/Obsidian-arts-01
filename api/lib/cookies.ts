@@ -5,13 +5,16 @@ function isLocalhost(headers: Headers): boolean {
   return host.startsWith("localhost:") || host.startsWith("127.0.0.1:");
 }
 
-export function getSessionCookieOptions(headers: Headers): CookieOptions {
+export function getSessionCookieOptions(
+  headers: Headers,
+  maxAgeSeconds: number,
+): CookieOptions {
   const localhost = isLocalhost(headers);
-
   return {
     httpOnly: true,
     path: "/",
     sameSite: localhost ? "Lax" : "None",
     secure: !localhost,
+    maxAge: maxAgeSeconds,
   };
 }
