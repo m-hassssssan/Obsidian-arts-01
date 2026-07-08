@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { bodyLimit } from "hono/body-limit";
 import type { HttpBindings } from "@hono/node-server";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
@@ -15,6 +16,19 @@ import { eq } from "drizzle-orm";
 const app = new Hono<{ Bindings: HttpBindings }>();
 
 app.use(bodyLimit({ maxSize: 50 * 1024 * 1024 }));
+
+app.use(
+  "/api/*",
+  cors({
+    origin: (origin) => {
+      if (!origin) return "*";
+      return origin;
+    },
+    credentials: true,
+    allowMethods: ["GET", "POST", "OPTIONS"],
+    allowHeaders: ["content-type", "x-trpc-source"],
+  })
+);
 
 // Health check
 app.get("/api/health", (c) =>
