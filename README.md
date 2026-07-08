@@ -39,14 +39,7 @@ npm start
 
 ## Seed credentials
 
-After running `npm run db:seed`:
-
-| Email                       | Password       | Role  |
-| --------------------------- | -------------- | ----- |
-| `admin@obsidianarts.com`    | `obsidian2026` | admin |
-| `elena@vasquez.studio`      | `patron2026`   | user  |
-| `marcus@chen.studio`        | `patron2026`   | user  |
-| `amara@diop.studio`         | `patron2026`   | user  |
+After running `npm run db:seed`, check `db/seed.ts` to find the default user accounts and credentials.
 
 ## Routes
 

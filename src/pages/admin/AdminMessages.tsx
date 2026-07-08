@@ -6,6 +6,8 @@ export default function AdminMessages() {
   const [filter, setFilter] = useState<"all" | "commissioned" | "unassigned">(
     "all",
   );
+  const [replyingToId, setReplyingToId] = useState<number | null>(null);
+  const [inlineReplyText, setInlineReplyText] = useState("");
   const query = trpc.message.list.useQuery({ limit: 200 });
   const deleteMutation = trpc.message.delete.useMutation({
     onSuccess: () => query.refetch(),
@@ -132,7 +134,18 @@ export default function AdminMessages() {
               </span>
             </div>
             <p className="font-inter text-sm whitespace-pre-wrap">{m.content}</p>
-            <div className="mt-2 flex items-center justify-end">
+            <div className="mt-2 flex items-center justify-end gap-3">
+              {!m.isStaffReply && (
+                <button
+                  onClick={() => {
+                    setReplyingToId(m.id);
+                    setInlineReplyText("");
+                  }}
+                  className="font-oswald text-[10px] font-bold uppercase tracking-widest text-black hover:underline flex items-center gap-1"
+                >
+                  REPLY
+                </button>
+              )}
               <button
                 onClick={() => {
                   if (confirm("Delete this message?")) {
@@ -144,6 +157,43 @@ export default function AdminMessages() {
                 <Trash2 size={10} /> DELETE
               </button>
             </div>
+            {replyingToId === m.id && (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!inlineReplyText.trim()) return;
+                  createMutation.mutate({
+                    content: `[Reply to @${m.userName || m.userEmail || "Patron"}] ${inlineReplyText.trim()}`,
+                    commissionId: m.commissionId,
+                  });
+                  setReplyingToId(null);
+                  setInlineReplyText("");
+                }}
+                className="mt-3 flex gap-2 border-t-[2px] border-black pt-3"
+              >
+                <input
+                  type="text"
+                  value={inlineReplyText}
+                  onChange={(e) => setInlineReplyText(e.target.value)}
+                  placeholder={`Reply to ${m.userName || "Patron"}...`}
+                  className="input-brutal flex-1 text-xs"
+                />
+                <button
+                  type="submit"
+                  disabled={createMutation.isPending || !inlineReplyText.trim()}
+                  className="btn-brutal btn-brutal-yellow text-[10px] py-1 px-3"
+                >
+                  SEND
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setReplyingToId(null)}
+                  className="btn-brutal btn-brutal-black text-[10px] py-1 px-3"
+                >
+                  CANCEL
+                </button>
+              </form>
+            )}
           </div>
         ))}
       </div>

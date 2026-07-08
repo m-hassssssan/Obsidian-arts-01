@@ -98,15 +98,26 @@ app.get(Paths.oauthCallback, async (c) => {
 });
 
 app.use("/api/trpc/*", async (c) => {
-  return fetchRequestHandler({
+  const resHeaders = new Headers();
+  const response = await fetchRequestHandler({
     endpoint: "/api/trpc",
     req: c.req.raw,
     router: appRouter,
-    createContext,
+    createContext: async (opts) => {
+      const ctx = await createContext(opts);
+      ctx.resHeaders = resHeaders;
+      return ctx;
+    },
     onError({ error, path }) {
       console.error(`[trpc] ${path} failed:`, error);
     },
   });
+
+  const newResponse = new Response(response.body, response);
+  resHeaders.forEach((value, key) => {
+    newResponse.headers.append(key, value);
+  });
+  return newResponse;
 });
 app.all("/api/*", (c) => c.json({ error: "Not Found" }, 404));
 

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createRouter, authedQuery, adminQuery } from "../middleware";
 import { getDb } from "../queries/connection";
 import { messages, users } from "@db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, or, isNull } from "drizzle-orm";
 
 export const messageRouter = createRouter({
   // All threads (admin) – list conversations grouped by commission
@@ -81,7 +81,12 @@ export const messageRouter = createRouter({
         })
         .from(messages)
         .leftJoin(users, eq(messages.userId, users.id))
-        .where(eq(messages.userId, ctx.user.id))
+        .where(
+          or(
+            eq(messages.userId, ctx.user.id),
+            and(eq(messages.isStaffReply, true), isNull(messages.commissionId))
+          )
+        )
         .orderBy(desc(messages.createdAt))
         .limit(limit)
         .offset(offset);

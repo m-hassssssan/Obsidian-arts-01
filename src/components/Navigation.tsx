@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { Menu, X, LogOut, ShieldCheck, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { trpc } from "@/providers/trpc";
+import { ChatWidget } from "./ChatWidget";
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -198,6 +199,7 @@ export function Navigation() {
           </div>
         )}
       </div>
+      <ChatWidget />
     </nav>
   );
 }

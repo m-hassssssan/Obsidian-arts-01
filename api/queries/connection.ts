@@ -5,14 +5,16 @@ import * as relations from "@db/relations";
 
 const fullSchema = { ...schema, ...relations };
 
-let instance: ReturnType<typeof drizzle<typeof fullSchema>>;
+const globalForDb = globalThis as unknown as {
+  dbInstance: ReturnType<typeof drizzle<typeof fullSchema>> | undefined;
+};
 
 export function getDb() {
-  if (!instance) {
-    instance = drizzle(env.databaseUrl, {
+  if (!globalForDb.dbInstance) {
+    globalForDb.dbInstance = drizzle(env.databaseUrl, {
       mode: "planetscale",
       schema: fullSchema,
     });
   }
-  return instance;
+  return globalForDb.dbInstance;
 }
