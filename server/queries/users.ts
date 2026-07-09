@@ -92,11 +92,8 @@ export async function createLocalUser(input: {
   } else if (unionId === env.ownerUnionId) {
     values.role = "admin";
   }
-  const [result] = await db.insert(schema.users).values(values);
-  const [created] = await db
-    .select()
-    .from(schema.users)
-    .where(eq(schema.users.id, Number(result.insertId)));
+  await db.insert(schema.users).values(values);
+  const created = await findUserByEmail(input.email);
   return created;
 }
 
