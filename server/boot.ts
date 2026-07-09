@@ -61,7 +61,7 @@ app.get(Paths.oauthCallback, async (c) => {
 
   let user = existing;
   if (!user) {
-    const [insertResult] = await db.insert(users).values({
+    await db.insert(users).values({
       unionId,
       role,
       lastSignInAt: new Date(),
@@ -69,7 +69,7 @@ app.get(Paths.oauthCallback, async (c) => {
     const [created] = await db
       .select()
       .from(users)
-      .where(eq(users.id, Number(insertResult.insertId)));
+      .where(eq(users.unionId, unionId));
     user = created;
   } else {
     await db
