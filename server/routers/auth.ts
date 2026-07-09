@@ -11,7 +11,7 @@ import {
 } from "../queries/users";
 import { getDb } from "../queries/connection";
 import { users, messages, commissionEvents, commissions } from "@db/schema";
-import { eq, desc, like, or, sql, and } from "drizzle-orm";
+import { eq, desc, like, or, sql, and, inArray } from "drizzle-orm";
 import { verifyPassword } from "../lib/password";
 import {
   signSessionToken,
@@ -280,12 +280,23 @@ export const authRouter = createRouter({
 
       const db = getDb();
 
-      // Delete associated records first to satisfy foreign key constraints
+      // Find all commissions owned by this user
+      const userCommissions = await db.select({ id: commissions.id }).from(commissions).where(eq(commissions.userId, input.id));
+      const commissionIds = userCommissions.map(c => c.id);
+
+      // If they own commissions, we must delete all messages and events attached to those commissions
+      if (commissionIds.length > 0) {
+        await db.delete(messages).where(inArray(messages.commissionId, commissionIds));
+        await db.delete(commissionEvents).where(inArray(commissionEvents.commissionId, commissionIds));
+      }
+
+      // Delete any other records directly associated with the user
       await db.delete(messages).where(or(eq(messages.userId, input.id), eq(messages.recipientId, input.id)));
       await db.delete(commissionEvents).where(eq(commissionEvents.createdBy, input.id));
       await db.delete(commissions).where(eq(commissions.userId, input.id));
 
       // Finally delete the user
+
       await db.delete(users).where(eq(users.id, input.id));
       return { success: true };
     }),
