@@ -215,12 +215,34 @@ export const authRouter = createRouter({
     .mutation(async ({ input, ctx }) => {
       const db = getDb();
       const { id, ...updates } = input;
+      
+      const targetUser = await findUserById(id);
+      if (!targetUser) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+      }
+
       if (id === ctx.user.id && updates.role && updates.role !== "admin") {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "You cannot demote yourself",
         });
       }
+
+      if (targetUser.email === "admin@obsidianarts.com") {
+        if (updates.role && updates.role !== "admin") {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Cannot demote the permanent admin",
+          });
+        }
+        if (updates.status && updates.status !== "active") {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Cannot suspend or ban the permanent admin",
+          });
+        }
+      }
+
       const updateData: Record<string, unknown> = {};
       if (updates.name !== undefined) updateData.name = updates.name;
       if (updates.email !== undefined) updateData.email = updates.email;
@@ -228,11 +250,9 @@ export const authRouter = createRouter({
       if (updates.status !== undefined) updateData.status = updates.status;
       if (updates.bio !== undefined) updateData.bio = updates.bio;
       await db.update(users).set(updateData).where(eq(users.id, id));
+      
       const updated = await findUserById(id);
-      if (!updated) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
-      }
-      const { passwordHash: _passwordHash, ...safe } = updated;
+      const { passwordHash: _passwordHash, ...safe } = updated!;
       return safe;
     }),
 
@@ -245,6 +265,19 @@ export const authRouter = createRouter({
           message: "You cannot delete yourself",
         });
       }
+      
+      const targetUser = await findUserById(input.id);
+      if (!targetUser) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+      }
+
+      if (targetUser.email === "admin@obsidianarts.com") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Cannot delete the permanent admin",
+        });
+      }
+
       const db = getDb();
       await db.delete(users).where(eq(users.id, input.id));
       return { success: true };
