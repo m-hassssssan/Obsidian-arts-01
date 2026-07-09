@@ -10,7 +10,7 @@ import {
   getUserStats,
 } from "../queries/users";
 import { getDb } from "../queries/connection";
-import { users } from "@db/schema";
+import { users, messages, commissionEvents, commissions } from "@db/schema";
 import { eq, desc, like, or, sql, and } from "drizzle-orm";
 import { verifyPassword } from "../lib/password";
 import {
@@ -279,6 +279,13 @@ export const authRouter = createRouter({
       }
 
       const db = getDb();
+
+      // Delete associated records first to satisfy foreign key constraints
+      await db.delete(messages).where(or(eq(messages.userId, input.id), eq(messages.recipientId, input.id)));
+      await db.delete(commissionEvents).where(eq(commissionEvents.createdBy, input.id));
+      await db.delete(commissions).where(eq(commissions.userId, input.id));
+
+      // Finally delete the user
       await db.delete(users).where(eq(users.id, input.id));
       return { success: true };
     }),
