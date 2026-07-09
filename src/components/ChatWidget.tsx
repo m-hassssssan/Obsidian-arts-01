@@ -58,10 +58,12 @@ export function ChatWidget() {
   const filteredMessages = selectedCommissionId
     ? activeMessages.filter((m) => m.commissionId === selectedCommissionId)
     : activeMessages.filter((m) => {
-        if (m.commissionId && !selectedCommissionId) {
-          return m.isStaffReply;
-        }
-        return m.commissionId === null;
+        // Never show announcements in chat — they have their own panel
+        if (m.isAnnouncement) return false;
+        // Commission staff replies shown when that commission is selected
+        if (m.commissionId) return false;
+        // General chat: user's own messages + direct staff replies to this user
+        return true;
       });
 
   const handleSubmit = (e: React.FormEvent) => {
