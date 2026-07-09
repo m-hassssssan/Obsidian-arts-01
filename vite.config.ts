@@ -5,7 +5,7 @@ import hono from "@hono/vite-dev-server"
 import { defineConfig } from "vite"
 // https://vite.dev/config/
 export default defineConfig({
-  base: process.env.NODE_ENV === "production" ? "/Obsidian-arts-01/" : "/",
+  base: "/",
   plugins: [
     react(),
     hono({
