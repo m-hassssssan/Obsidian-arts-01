@@ -82,7 +82,7 @@ export default function AdminMessages() {
           onSubmit={(e) => {
             e.preventDefault();
             if (!newContent.trim()) return;
-            createMutation.mutate({ content: newContent, commissionId: null, recipientId: newRecipientId });
+            createMutation.mutate({ content: newContent, commissionId: null, recipientId: newRecipientId, isAnnouncement: !newRecipientId });
           }}
           className="space-y-3"
         >

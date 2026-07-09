@@ -70,15 +70,16 @@ export const messageRouter = createRouter({
       }
 
       // Non-admin: show messages the user is entitled to see:
-      //  1. Messages they sent themselves (non-commission general chat)
+      //  1. Messages they sent themselves
       //  2. Staff direct replies addressed specifically to them (recipientId = me)
-      //  3. Broadcast announcements (isStaffReply=true, recipientId=null, commissionId=null)
+      //  3. Explicit broadcast announcements (isAnnouncement=true)
       //  4. Staff replies on their own commission threads
       const rows = await db
         .select({
           id: messages.id,
           content: messages.content,
           isStaffReply: messages.isStaffReply,
+          isAnnouncement: messages.isAnnouncement,
           createdAt: messages.createdAt,
           userId: messages.userId,
           recipientId: messages.recipientId,
@@ -92,32 +93,22 @@ export const messageRouter = createRouter({
         .leftJoin(commissions, eq(messages.commissionId, commissions.id))
         .where(
           or(
-            // 1. Messages the user sent themselves (no commission)
+            // 1. Messages the user sent themselves
             and(
               eq(messages.userId, ctx.user.id),
-              eq(messages.isStaffReply, false),
-              isNull(messages.commissionId)
+              eq(messages.isStaffReply, false)
             ),
             // 2. Staff direct replies specifically to this user
             and(
               eq(messages.isStaffReply, true),
               eq(messages.recipientId, ctx.user.id)
             ),
-            // 3. Broadcast announcements (to all users, no specific recipient)
-            and(
-              eq(messages.isStaffReply, true),
-              isNull(messages.recipientId),
-              isNull(messages.commissionId)
-            ),
+            // 3. Explicit broadcast announcements only
+            eq(messages.isAnnouncement, true),
             // 4. Staff replies on this user's commission threads
             and(
               eq(messages.isStaffReply, true),
               eq(commissions.userId, ctx.user.id)
-            ),
-            // 5. The user's own commission messages
-            and(
-              eq(messages.userId, ctx.user.id),
-              eq(messages.isStaffReply, false)
             ),
           )
         )
@@ -131,7 +122,8 @@ export const messageRouter = createRouter({
     .input(
       z.object({
         commissionId: z.number().nullable().optional(),
-        recipientId: z.number().nullable().optional(), // Admin: target user for direct messages
+        recipientId: z.number().nullable().optional(),
+        isAnnouncement: z.boolean().optional(), // Admin: explicitly mark as broadcast to all users
         content: z.string().min(1).max(4000),
       }),
     )
@@ -141,6 +133,7 @@ export const messageRouter = createRouter({
         userId: ctx.user.id,
         commissionId: input.commissionId || null,
         recipientId: input.recipientId || null,
+        isAnnouncement: input.isAnnouncement ?? false,
         content: input.content,
         isStaffReply: ctx.user.role === "admin",
       });

@@ -48,7 +48,7 @@ export function ChatWidget() {
 
   const allMessages = messagesQuery.data?.items ?? [];
   const announcements = allMessages
-    .filter((m) => m.isStaffReply && !m.recipientId && !m.commissionId)
+    .filter((m) => m.isAnnouncement)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   const unreadAnnouncements = announcements.length;

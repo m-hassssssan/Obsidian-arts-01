@@ -122,6 +122,8 @@ export const messages = mysqlTable("messages", {
   recipientId: bigint("recipientId", { mode: "number", unsigned: true }).references(() => users.id),
   content: text("content").notNull(),
   isStaffReply: boolean("isStaffReply").default(false),
+  // isAnnouncement: explicitly marks a broadcast message visible to ALL users
+  isAnnouncement: boolean("isAnnouncement").default(false),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
