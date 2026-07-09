@@ -118,6 +118,8 @@ export const messages = mysqlTable("messages", {
   userId: bigint("userId", { mode: "number", unsigned: true })
     .notNull()
     .references(() => users.id),
+  // recipientId: for direct (non-commission) messages from admin to a specific user
+  recipientId: bigint("recipientId", { mode: "number", unsigned: true }).references(() => users.id),
   content: text("content").notNull(),
   isStaffReply: boolean("isStaffReply").default(false),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

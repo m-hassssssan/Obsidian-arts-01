@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build",
+  "name": "obsidian-arts-01",
   "outputDirectory": "dist/public",
   "rewrites": [
     {

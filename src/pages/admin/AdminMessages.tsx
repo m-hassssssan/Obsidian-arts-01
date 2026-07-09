@@ -17,10 +17,21 @@ export default function AdminMessages() {
     onSuccess: () => {
       utils.message.list.invalidate();
       setNewContent("");
+      setNewRecipientId(null);
     },
   });
 
   const [newContent, setNewContent] = useState("");
+  const [newRecipientId, setNewRecipientId] = useState<number | null>(null);
+
+  // Build list of users we can message (from existing messages)
+  const knownUsers = Array.from(
+    new Map(
+      (query.data?.items ?? [])
+        .filter((m) => !m.isStaffReply && m.userId && m.userName)
+        .map((m) => [m.userId, { id: m.userId, name: m.userName, email: m.userEmail }])
+    ).values()
+  );
 
   if (query.isLoading) {
     return <div className="p-10 font-inter text-sm">Loading…</div>;
@@ -71,23 +82,40 @@ export default function AdminMessages() {
           onSubmit={(e) => {
             e.preventDefault();
             if (!newContent.trim()) return;
-            createMutation.mutate({ content: newContent, commissionId: null });
+            createMutation.mutate({ content: newContent, commissionId: null, recipientId: newRecipientId });
           }}
-          className="flex items-start gap-3"
+          className="space-y-3"
         >
-          <textarea
-            value={newContent}
-            onChange={(e) => setNewContent(e.target.value)}
-            placeholder="Write a public studio announcement (visible to all users)…"
-            className="input-brutal flex-1 min-h-[60px] text-sm"
-          />
-          <button
-            type="submit"
-            disabled={createMutation.isPending || !newContent.trim()}
-            className="btn-brutal btn-brutal-yellow flex items-center gap-1 text-xs"
-          >
-            <Send size={12} /> POST
-          </button>
+          <div className="flex items-center gap-2">
+            <label className="font-oswald text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Send To:</label>
+            <select
+              value={newRecipientId ?? ""}
+              onChange={(e) => setNewRecipientId(e.target.value ? Number(e.target.value) : null)}
+              className="flex-1 border-[2px] border-black px-3 py-2 font-inter text-sm bg-white outline-none"
+            >
+              <option value="">📢 All users (announcement)</option>
+              {knownUsers.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.name || u.email || `User #${u.id}`}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-start gap-3">
+            <textarea
+              value={newContent}
+              onChange={(e) => setNewContent(e.target.value)}
+              placeholder={newRecipientId ? "Write a private message to this user…" : "Write a public studio announcement (visible to all users)…"}
+              className="input-brutal flex-1 min-h-[60px] text-sm"
+            />
+            <button
+              type="submit"
+              disabled={createMutation.isPending || !newContent.trim()}
+              className="btn-brutal btn-brutal-yellow flex items-center gap-1 text-xs"
+            >
+              <Send size={12} /> POST
+            </button>
+          </div>
         </form>
       </section>
 
@@ -163,8 +191,9 @@ export default function AdminMessages() {
                   e.preventDefault();
                   if (!inlineReplyText.trim()) return;
                   createMutation.mutate({
-                    content: `[Reply to @${m.userName || m.userEmail || "Patron"}] ${inlineReplyText.trim()}`,
+                    content: inlineReplyText.trim(),
                     commissionId: m.commissionId,
+                    recipientId: m.userId, // Route reply back to the specific user who sent the original message
                   });
                   setReplyingToId(null);
                   setInlineReplyText("");

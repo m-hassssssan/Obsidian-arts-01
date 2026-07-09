@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     react(),
     hono({
-      entry: "api/boot.ts",
+      entry: "server/boot.ts",
       exclude: [/^\/(?!api)/],
     }),
   ],

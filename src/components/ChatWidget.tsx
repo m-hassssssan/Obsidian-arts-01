@@ -1,32 +1,29 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/providers/trpc";
 import { useAuth } from "@/hooks/use-auth";
-import { MessageSquare, Send, X } from "lucide-react";
+import { MessageSquare, Send, X, Megaphone, Bell } from "lucide-react";
 
 export function ChatWidget() {
   const { state } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [isAnnouncementsOpen, setIsAnnouncementsOpen] = useState(false);
   const [selectedCommissionId, setSelectedCommissionId] = useState<number | null>(null);
   const [messageText, setMessageText] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Don't render chat widget if user is not logged in or is admin (admin uses the dashboard)
-  if (state.status !== "authenticated" || state.user.role === "admin") {
-    return null;
-  }
+  const isAuthenticated = state.status === "authenticated";
+  const isUser = isAuthenticated && state.user.role !== "admin";
 
-  // Fetch client's commissions to allow them to chat about specific inquiries
+  // ALL hooks must be called unconditionally — no hooks after any early return
   const commissionsQuery = trpc.commission.list.useQuery(
     { limit: 50 },
-    { enabled: isOpen }
+    { enabled: isUser && isOpen }
   );
 
-  // Fetch message thread based on selected commission (or general thread)
   const messagesQuery = trpc.message.list.useQuery(
     selectedCommissionId ? { commissionId: selectedCommissionId, limit: 100 } : { limit: 100 },
     {
-      enabled: isOpen,
-      // Poll every 4 seconds to fetch new staff replies in real-time
+      enabled: isUser && (isOpen || isAnnouncementsOpen),
       refetchInterval: 4000,
     }
   );
@@ -38,20 +35,34 @@ export function ChatWidget() {
     },
   });
 
-  // Scroll to bottom when message list loads/updates
   useEffect(() => {
-    if (messagesEndRef.current) {
+    if (messagesEndRef.current && isOpen) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messagesQuery.data?.items, isOpen]);
 
-  const activeMessages = [...(messagesQuery.data?.items ?? [])].reverse();
+  // Don't render chat widget if user is not logged in or is admin (admin uses the dashboard)
+  if (!isUser) {
+    return null;
+  }
 
-  // If a commission is selected, filter messages matching that commission ID
-  // (In case the general query returned mixed general messages)
+  const allMessages = messagesQuery.data?.items ?? [];
+  const announcements = allMessages
+    .filter((m) => m.isStaffReply && !m.recipientId && !m.commissionId)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  const unreadAnnouncements = announcements.length;
+
+  const activeMessages = [...allMessages].reverse();
+
   const filteredMessages = selectedCommissionId
     ? activeMessages.filter((m) => m.commissionId === selectedCommissionId)
-    : activeMessages.filter((m) => m.commissionId === null);
+    : activeMessages.filter((m) => {
+        if (m.commissionId && !selectedCommissionId) {
+          return m.isStaffReply;
+        }
+        return m.commissionId === null;
+      });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,19 +73,97 @@ export function ChatWidget() {
     });
   };
 
+
   return (
     <>
-      {/* Floating Chat Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-[999] bg-[#1a1a1a] text-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(249,255,0,1)] hover:bg-[#F9FF00] hover:text-black hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all font-oswald text-xs font-bold uppercase tracking-widest flex items-center gap-2"
-        aria-label="Open Studio Messenger"
-      >
-        <MessageSquare size={16} />
-        {isOpen ? "Close Chat" : "Studio Chat"}
-      </button>
 
-      {/* Chat Window */}
+
+      {/* ── Announcements Panel ── */}
+      {isAnnouncementsOpen && (
+        <div className="fixed bottom-24 right-[198px] z-[998] w-[340px] md:w-[390px] bg-white border-[3px] border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col font-inter text-[#1a1a1a] max-h-[70vh]">
+          <div className="bg-[#FF0004] text-white p-4 border-b-[3px] border-black flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Bell size={14} />
+              <h3 className="font-oswald text-sm font-bold uppercase tracking-widest">
+                Studio Announcements
+              </h3>
+            </div>
+            <button
+              onClick={() => setIsAnnouncementsOpen(false)}
+              className="text-white/75 hover:text-white transition-colors"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#fafafa]">
+            {messagesQuery.isLoading ? (
+              <p className="font-oswald text-xs uppercase tracking-widest text-[#1a1a1a]/50 text-center py-6">Loading…</p>
+            ) : announcements.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-10 text-center space-y-2">
+                <Megaphone size={28} className="text-[#1a1a1a]/20" />
+                <p className="font-oswald text-xs uppercase tracking-widest text-[#1a1a1a]/50 font-bold">
+                  No announcements yet
+                </p>
+                <p className="text-[10px] text-[#1a1a1a]/40 leading-relaxed">
+                  Gallery advisors will post updates here.
+                </p>
+              </div>
+            ) : (
+              announcements.map((m) => (
+                <div key={m.id} className="border-[2px] border-black bg-[#F9FF00] p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <span className="bg-[#FF0004] text-white text-[8px] font-bold uppercase tracking-widest px-1.5 py-0.5 font-oswald">
+                      STUDIO
+                    </span>
+                    <span className="ml-auto text-[9px] text-[#1a1a1a]/50 font-inter">
+                      {new Date(m.createdAt).toLocaleDateString(undefined, {
+                        month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+                      })}
+                    </span>
+                  </div>
+                  <p className="font-inter text-xs whitespace-pre-wrap leading-relaxed">{m.content}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── Bottom-right button strip: Announcements + Studio Chat ── */}
+      <div className="fixed bottom-6 right-6 z-[999] flex items-center gap-2">
+        {/* Announcements button */}
+        <button
+          onClick={() => {
+            setIsAnnouncementsOpen(!isAnnouncementsOpen);
+            setIsOpen(false);
+          }}
+          className="bg-[#FF0004] text-white border-[3px] border-black px-4 py-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#cc0003] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-oswald text-xs font-bold uppercase tracking-widest flex items-center gap-2"
+          aria-label="Studio Announcements"
+        >
+          <Megaphone size={16} />
+          Announcements
+          {unreadAnnouncements > 0 && (
+            <span className="bg-[#F9FF00] text-black text-[9px] font-bold px-1.5 py-0.5 border border-black">
+              {unreadAnnouncements}
+            </span>
+          )}
+        </button>
+
+        {/* Studio Chat button */}
+        <button
+          onClick={() => {
+            setIsOpen(!isOpen);
+            setIsAnnouncementsOpen(false);
+          }}
+          className="bg-[#1a1a1a] text-white border-[3px] border-black px-4 py-4 shadow-[4px_4px_0px_0px_rgba(249,255,0,1)] hover:bg-[#F9FF00] hover:text-black hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all font-oswald text-xs font-bold uppercase tracking-widest flex items-center gap-2"
+          aria-label="Open Studio Messenger"
+        >
+          <MessageSquare size={16} />
+          {isOpen ? "Close Chat" : "Studio Chat"}
+        </button>
+      </div>
+
+      {/* ── Chat Window ── */}
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-[999] w-[350px] md:w-[400px] h-[500px] bg-white border-[3px] border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col font-inter text-[#1a1a1a]">
           {/* Header */}
@@ -108,7 +197,7 @@ export function ChatWidget() {
               }}
               className="w-full border-[2px] border-black bg-white px-2 py-1 font-oswald text-[10px] font-bold uppercase tracking-wider outline-none cursor-pointer"
             >
-              <option value="">General Chat & Announcements</option>
+              <option value="">General Chat & Direct Messages</option>
               {commissionsQuery.data?.items.map((c) => (
                 <option key={c.id} value={c.id}>
                   Commission #{c.id}: {c.title.slice(0, 25)}...
@@ -134,12 +223,12 @@ export function ChatWidget() {
                 <p className="text-[10px] text-[#1a1a1a]/50 leading-relaxed">
                   {selectedCommissionId
                     ? "Send a message regarding this commission inquiry. Studio managers will reply here."
-                    : "Post a message or check here for announcements from the gallery advisors."}
+                    : "Send a message to the studio. Advisors will reply directly here."}
                 </p>
               </div>
             ) : (
               filteredMessages.map((m) => {
-                const isMe = m.userId === state.user.id;
+                const isMe = m.userId === state.user.id && !m.isStaffReply;
                 return (
                   <div
                     key={m.id}
@@ -147,11 +236,16 @@ export function ChatWidget() {
                   >
                     <div className="flex items-center gap-1.5 mb-1 px-1">
                       <span className="font-oswald text-[9px] font-bold uppercase tracking-wider text-[#1a1a1a]/50">
-                        {m.isStaffReply ? "Studio Advisor" : m.userName || "You"}
+                        {m.isStaffReply ? "Studio Advisor" : "You"}
                       </span>
                       {m.isStaffReply && (
-                        <span className="bg-[#FF0004] text-white text-[7px] font-bold uppercase tracking-widest px-1 py-0.2">
+                        <span className="bg-[#FF0004] text-white text-[7px] font-bold uppercase tracking-widest px-1 py-0.5 font-oswald">
                           STAFF
+                        </span>
+                      )}
+                      {m.commissionId && (
+                        <span className="text-[8px] text-[#1a1a1a]/40 font-inter">
+                          · Commission #{m.commissionId}
                         </span>
                       )}
                       <span className="text-[8px] text-[#1a1a1a]/40">
